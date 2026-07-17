@@ -131,7 +131,7 @@ export default function Board({ grid, rules, me, claim, lastUpdate, lastRejectio
   const meId = me?.id;
 
   return (
-    <section className="relative flex min-w-0 flex-col border-r border-[#232a3d]">
+    <section className="relative flex min-h-[60vh] flex-col border-r border-[#232a3d] lg:min-h-0 lg:flex-1">
       <div className="flex items-center gap-2 border-b border-[#232a3d] px-4 py-[10px]">
       <button
       title="Zoom out"
