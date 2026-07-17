@@ -1,15 +1,3 @@
-/**
- * TERRITORY — real-time shared grid capture game
- * -------------------------------------------------
- * Server is the single source of truth for grid state. All writes
- * (claims) are validated and applied here, then broadcast to every
- * connected client. Because Node processes socket events one at a
- * time on a single thread, two "simultaneous" claims on the same
- * cell are never actually concurrent from the server's point of
- * view — they're serialized, and whichever arrives first wins.
- * That's the whole conflict-resolution story: no locks needed,
- * just a single authoritative process making decisions in order.
- */
 
 const path = require('path');
 const express = require('express');
@@ -28,8 +16,7 @@ const CLAIM_COOLDOWN_MS = 1200; // how often a player may claim a cell
 const IMMUNITY_MS = 4000; // a freshly-claimed cell resists recapture briefly
 const LEADERBOARD_SIZE = 8;
 
-// A curated, high-contrast palette so player colors are always readable
-// against the dark board and distinguishable from one another.
+
 const PALETTE = [
   '#f59e0b', '#fb7185', '#a78bfa', '#34d399',
   '#38bdf8', '#fb923c', '#f472b6', '#a3e635',
@@ -52,9 +39,7 @@ function sanitizeName(raw) {
   return cleaned.length ? cleaned : randomName();
 }
 
-// ---- State ---------------------------------------------------------------
-// Grid cells reference a persistent profile id, NOT a socket id, so
-// ownership survives reconnects/refreshes.
+
 const grid = new Array(CELL_COUNT).fill(null).map(() => ({
   owner: null,      // profile id
   claimedAt: 0,
@@ -136,8 +121,7 @@ app.get('*', (req, res, next) => {
 
 const server = http.createServer(app);
 const io = new Server(server, {
-  // In dev, the React app runs on Vite's own port (5173) and talks to
-  // this server over a different origin, so CORS needs to allow it.
+ 
   cors: { origin: '*' },
 });
 

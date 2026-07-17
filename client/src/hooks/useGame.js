@@ -1,10 +1,16 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { io } from 'socket.io-client';
 
-// Module-level singleton: created once regardless of React StrictMode's
-// dev-mode double-invoke of effects, and shared if useGame were ever
-// used from more than one place.
-const socket = io({ autoConnect: false });
+
+const socket = io(
+  import.meta.env.DEV
+    ? undefined
+    : import.meta.env.VITE_API_URL,
+  {
+    autoConnect: false,
+    transports: ["websocket"],
+  }
+);
 
 function getClientId() {
   let id = localStorage.getItem('territory_id');
