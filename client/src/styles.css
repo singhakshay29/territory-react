@@ -1,0 +1,91 @@
+@import "tailwindcss";
+:root {
+  --bg: #0b0e14;
+  --panel: #131826;
+  --panel-2: #1a2032;
+  --line: #232a3d;
+  --cell: #1b2130;
+  --cell-hover: #262e44;
+  --text: #e8ebf3;
+  --text-dim: #7c869c;
+  --accent: #5eead4;
+  --accent-dim: #2e6b62;
+  --danger: #fb7185;
+  --radius: 10px;
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-body: 'Inter', sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  overflow: hidden;
+}
+
+.hidden { display: none !important; }
+
+
+.cell {
+  background: var(--cell);
+  cursor: pointer;
+  position: relative;
+  transition: background-color 0.25s ease, transform 0.12s ease;
+}
+.cell:hover { background: var(--cell-hover); }
+.cell:active { transform: scale(0.9); }
+.cell.owned { transition: background-color 0.35s ease; }
+.cell.mine::after {
+  content: '';
+  position: absolute; inset: 2px;
+  border: 1.5px solid rgba(255,255,255,0.55);
+  border-radius: 2px;
+  pointer-events: none;
+}
+.cell.pulse { animation: cellPulse 0.45s ease; }
+@keyframes cellPulse {
+  0% { transform: scale(1); filter: brightness(1.9); }
+  100% { transform: scale(1); filter: brightness(1); }
+}
+.cell.rejected { animation: cellShake 0.3s ease; }
+@keyframes cellShake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-2px); }
+  75% { transform: translateX(2px); }
+}
+
+
+.ripple-ring {
+  fill: none;
+  stroke-width: 2.5;
+  opacity: 0.9;
+  animation: rippleOut 0.7s cubic-bezier(.2,.7,.3,1) forwards;
+}
+@keyframes rippleOut {
+  0% { r: 2; opacity: 0.9; stroke-width: 5; }
+  100% { r: 34; opacity: 0; stroke-width: 0.5; }
+}
+
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+
+@media (max-width: 860px) {
+  .layout { grid-template-columns: 1fr; grid-template-rows: 1fr auto; }
+  .board-wrap { border-right: none; border-bottom: 1px solid var(--line); }
+  .sidebar { flex-direction: row; overflow-x: auto; }
+  .panel { border-bottom: none; border-right: 1px solid var(--line); min-width: 240px; }
+  .topbar-stats { display: none; }
+}
+
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-thumb { background: var(--line); border-radius: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
